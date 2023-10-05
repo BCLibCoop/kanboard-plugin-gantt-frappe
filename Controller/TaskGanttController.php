@@ -21,11 +21,7 @@ class TaskGanttController extends BaseController
     public function show()
     {
         $project = $this->getProject();
-        if (isset($_GET['search'])) {
-            $search = $this->helper->projectHeader->getSearchQuery($project);
-        } else {
-            $search = 'n';
-        }
+        $search = $this->helper->projectHeader->getSearchQuery($project);
 
         $sorting = $this->request->getStringParam('sorting', '');
         $filter = $this->taskLexer->build($search)->withFilter(new TaskProjectFilter($project['id']));
@@ -39,7 +35,6 @@ class TaskGanttController extends BaseController
         } else {
             $filter->getQuery()->asc('column_position')->asc(TaskModel::TABLE.'.position');
         }
-
 
         $this->response->html($this->helper->layout->app('Gantt:task_gantt/show', array(
             'project' => $project,
@@ -71,9 +66,11 @@ class TaskGanttController extends BaseController
         if (! empty($values)) {
             $elements = explode("-", $changes['id']);
             $values['id'] = $elements[1];
+            $result = null;
+
             if ($elements[0] === "task") {
                 $result = $this->taskModificationModel->update($values);
-            } else {
+            } elseif ($elements[0] === "subtask") {
                 unset($values['date_started']);
                 $values['due_date'] = $values['date_due'];
                 unset($values['date_due']);
