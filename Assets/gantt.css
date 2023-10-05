@@ -69,3 +69,23 @@
 .today-highlight {
 	fill: #efff007a !important;
 }
+
+.plugin-header {
+  margin-bottom: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items:center
+}
+
+@media (max-width: 767px) {
+  .page #main .menu-inline {
+    padding-top: 0;
+  }
+
+  .plugin-header {
+      display:block
+  }
+}

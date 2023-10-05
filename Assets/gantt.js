@@ -127,16 +127,18 @@ KB.on('dom.ready', function () {
 
 				gantt.gantt_start = new Date(gantt.gantt_start.getTime() - t);
 				gantt.set_scroll_position();
+
 				return gantt;
 			})
 			.then((chart) => {
-				$('.btn-gantt-chart').on('click', function () {
+				$('.plugin-header .views-switcher-component a').on('click', function (e) {
+					e.preventDefault();
 					let $btn = $(this);
 					var mode = $btn.text();
 
 					chart.change_view_mode(mode);
-					$btn.parent().parent().find('button').removeClass('active');
-					$btn.addClass('active');
+					$btn.parent().parent().find('li').removeClass('active');
+					$btn.parent('li').addClass('active');
 				});
 				//DoubleScroll(container);
 			});
@@ -170,19 +172,5 @@ KB.on('dom.ready', function () {
 		});
 
 		element.parentNode.insertBefore(scrollbar, element);
-	}
-
-	const getQueryParams = (params, url) => {
-		let href = url;
-		// this is an expression to get query strings
-		let regexp = new RegExp('[?&]' + params + '=([^&#]*)', 'i');
-		let qString = regexp.exec(href);
-		return qString ? qString[1] : null;
-	};
-
-	// Fix search filter error -> missing plugin name
-	let plugin = document.getElementById('form-plugin');
-	if (plugin !== null) {
-		plugin.value = getQueryParams('plugin', window.location.href);
 	}
 });

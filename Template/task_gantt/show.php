@@ -1,55 +1,56 @@
 <section id="main">
     <?= $this->projectHeader->render($project, 'TaskGanttController', 'show', false, 'Gantt') ?>
-    <div class="menu-inline">
-        <ul>
-            <li <?= $sorting === 'board' ? 'class="active"' : '' ?>>
-                <?= $this->url->icon('sort-numeric-asc', t('Sort by position'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'board', 'plugin' => 'Gantt')) ?>
-            </li>
-            <li <?= $sorting === 'date' ? 'class="active"' : '' ?>>
-                <?= $this->url->icon('sort-amount-asc', t('Sort by date'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'date', 'plugin' => 'Gantt')) ?>
-            </li>
-            <li>
-                <?= $this->modal->large('plus', t('Add task'), 'TaskCreationController', 'show', array('project_id' => $project['id'])) ?>
-            </li>
-            <li>
-                <button type="button" class="btn dropdown-menu dropdown-menu-link-icon btn-gantt-chart">Quarter Day</button>
-            </li>
-            <li>
-                <button type="button" class="btn dropdown-menu dropdown-menu-link-icon btn-gantt-chart">Half Day</button>
-            </li>
-            <li>
-                <button type="button" class="btn dropdown-menu dropdown-menu-link-icon btn-gantt-chart active">Day</button>
-            </li>
-            <li>
-                <button type="button" class="btn dropdown-menu dropdown-menu-link-icon btn-gantt-chart">Week</button>
-            </li>
-            <li>
-                <button type="button" class="btn dropdown-menu dropdown-menu-link-icon btn-gantt-chart">Month</button>
-            </li>
-
-        </ul>
+    <div class="plugin-header">
+        <div class="menu-inline">
+            <ul>
+                <li <?= $sorting === 'board' ? 'class="active"' : '' ?>>
+                    <?= $this->url->icon('sort-numeric-asc', t('Sort by position'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'board', 'plugin' => 'Gantt')) ?>
+                </li>
+                <li <?= $sorting === 'date' ? 'class="active"' : '' ?>>
+                    <?= $this->url->icon('sort-amount-asc', t('Sort by date'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'date', 'plugin' => 'Gantt')) ?>
+                </li>
+                <li>
+                    <?= $this->modal->large('plus', t('Add task'), 'TaskCreationController', 'show', array('project_id' => $project['id'])) ?>
+                </li>
+            </ul>
+        </div>
+        <div class="views-switcher-component menu-inline">
+            <ul class="views">
+                <li>
+                    <a href="#">Quarter Day</a>
+                </li>
+                <li>
+                    <a href="#">Half Day</a>
+                </li>
+                <li class="active">
+                    <a href="#">Day</a>
+                </li>
+                <li>
+                    <a href="#">Week</a>
+                </li>
+                <li>
+                    <a href="#">Month</a>
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <?php if (!empty($tasks)): ?>
-
-        <?php foreach ($tasks as $task): ?>
+    <?php if (!empty($tasks)) : ?>
+        <?php foreach ($tasks as $task) : ?>
             <?php
+            $idattribute = $task['id'];
             $elements = explode("-", $task['id']);
             $task['id'] = $elements[1] ?? null;
-            $idattribute = $task['id'];
-            if (is_array($elements)) {
-                $idattribute = implode('-', $elements);
-            }
             ?>
-        <div id="dropdown-task-id-<?= $idattribute ?>" style="display: none;">
-            <?php if ($elements[0] === "task"): ?>
-                  <?= $this->render('task/dropdown', array('task' => $task, 'redirect' => 'board')) ?>
-            <?php endif ?>
-            <?php if ($elements[0] === "subtask"): ?>
-                <?= $this->render('subtask/menu', array('task' => $task['task'] ?? [], 'subtask' => $task)) ?>
-            <?php endif ?>
-        </div>
+            <div id="dropdown-task-id-<?= $idattribute ?>" style="display: none;">
+                <?php if ($elements[0] === "task") : ?>
+                    <?= $this->render('task/dropdown', array('task' => $task, 'redirect' => 'board')) ?>
+                <?php elseif ($elements[0] === "subtask") : ?>
+                    <?= $this->render('subtask/menu', array('task' => $task['task'] ?? [], 'subtask' => $task)) ?>
+                <?php endif ?>
+            </div>
         <?php endforeach ?>
+        <p class="alert alert-info"><?= t('Moving or resizing a task will change the start and due date of the task.') ?></p>
         <svg
             id="gantt-chart"
             data-records='<?= json_encode($tasks, JSON_HEX_APOS) ?>'
@@ -59,8 +60,7 @@
             data-label-assignee="<?= t('Assignee:') ?>"
             data-label-not-defined="<?= t('There is no start date or due date for this task.') ?>"
         ></svg>
-        <p class="alert alert-info"><?= t('Moving or resizing a task will change the start and due date of the task.') ?></p>
-    <?php else: ?>
+    <?php else : ?>
         <p class="alert"><?= t('There is no task in your project.') ?></p>
     <?php endif ?>
 </section>
