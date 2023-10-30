@@ -101,7 +101,7 @@ KB.on('dom.ready', function () {
 					// column_width: 30,
 					// step: 24,
 					// header_height: 100,
-					view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
+					view_modes: ['Half Day', 'Day', 'Week', 'Month', 'Quarter'],
 					bar_height: 25,
 					// bar_corner_radius: 3,
 					// arrow_curve: 5,

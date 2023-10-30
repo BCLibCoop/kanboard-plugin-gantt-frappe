@@ -5,6 +5,8 @@
 .gantt .bar {
 	fill: #f5f9ff;
 	stroke: #ccdcf3;
+	user-select: none !important;
+	-webkit-user-select: none !important;
 }
 
 .gantt .bar-wrapper:hover .bar,
@@ -15,6 +17,10 @@
 .gantt .bar-label {
 	font-weight: unset;
 	fill: #304b6f;
+}
+
+.gantt-container .popup-wrapper {
+	opacity: 0;
 }
 
 .gantt-container .popup-wrapper,
