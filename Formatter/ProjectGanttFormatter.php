@@ -33,23 +33,10 @@ class ProjectGanttFormatter extends BaseFormatter implements FormatterInterface
             $bars[] = array(
                 'type' => 'project',
                 'id' => $project['id'],
-                'title' => $project['name'],
-                'start' => array(
-                    (int) date('Y', $start),
-                    (int) date('n', $start),
-                    (int) date('j', $start),
-                ),
-                'end' => array(
-                    (int) date('Y', $end),
-                    (int) date('n', $end),
-                    (int) date('j', $end),
-                ),
-                'link' => $this->helper->url->href('ProjectViewController', 'show', array('project_id' => $project['id'])),
-                'board_link' => $this->helper->url->href('BoardViewController', 'show', array('project_id' => $project['id'])),
-                'gantt_link' => $this->helper->url->href('TaskGanttController', 'show', array('project_id' => $project['id'], 'plugin' => 'Gantt')),
-                'color' => $color,
-                'not_defined' => empty($project['start_date']) || empty($project['end_date']),
-                'users' => $this->projectUserRoleModel->getAllUsersGroupedByRole($project['id']),
+                'name' => $project['name'],
+                'start' => date('Y-n-j', $start),
+                'end' => date('Y-n-j', $end),
+                'custom_class' => strtolower("color-{$color['name']}"),
             );
         }
 

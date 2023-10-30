@@ -37,29 +37,21 @@
 
     <?php if (!empty($tasks)) : ?>
         <?php foreach ($tasks as $task) : ?>
-            <?php
-            $idattribute = $task['id'];
-            $elements = explode("-", $task['id']);
-            $task['id'] = $elements[1] ?? null;
-            ?>
-            <div id="dropdown-task-id-<?= $idattribute ?>" style="display: none;">
-                <?php if ($elements[0] === "task") : ?>
+            <div id="dropdown-task-id-<?= $task['id'] ?>" style="display: none;">
+                <?php $task['id'] = $task['original_id']; ?>
+                <?php if ($task['type'] === 'task') : ?>
                     <?= $this->render('task/dropdown', array('task' => $task, 'redirect' => 'board')) ?>
-                <?php elseif ($elements[0] === "subtask") : ?>
-                    <?= $this->render('subtask/menu', array('task' => $task['task'] ?? [], 'subtask' => $task)) ?>
+                <?php elseif ($task['type'] === 'subtask') : ?>
+                    <?= $this->render('subtask/menu', array('task' => $task['task'], 'subtask' => $task)) ?>
                 <?php endif ?>
             </div>
         <?php endforeach ?>
         <p class="alert alert-info"><?= t('Moving or resizing a task will change the start and due date of the task.') ?></p>
-        <svg
-            id="gantt-chart"
-            data-records='<?= json_encode($tasks, JSON_HEX_APOS) ?>'
-            data-save-url="<?= $this->url->href('TaskGanttController', 'save', array('project_id' => $project['id'], 'plugin' => 'Gantt')) ?>"
-            data-label-start-date="<?= t('Start date:') ?>"
-            data-label-end-date="<?= t('Due date:') ?>"
-            data-label-assignee="<?= t('Assignee:') ?>"
-            data-label-not-defined="<?= t('There is no start date or due date for this task.') ?>"
-        ></svg>
+        <svg id="gantt-chart"></svg>
+        <script>
+            var ganttSaveController = <?= json_encode($this->url->to('TaskGanttController', 'save', array('project_id' => $project['id'], 'plugin' => 'Gantt'))) ?>;
+            var ganttTasks = <?= json_encode($tasks) ?>;
+        </script>
     <?php else : ?>
         <p class="alert"><?= t('There is no task in your project.') ?></p>
     <?php endif ?>

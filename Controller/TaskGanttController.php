@@ -55,26 +55,34 @@ class TaskGanttController extends BaseController
         $changes = $this->request->getJson();
         $values = [];
 
-        if (! empty($changes['start'])) {
-            $values['date_started'] = strtotime($changes['start']);
+        foreach ($changes as $field => $change) {
+            switch ($field) {
+                case 'date_started':
+                case 'date_due':
+                    // We can only handle task data right now
+                    if ($changes['type'] === 'task') {
+                        $values[$field] = strtotime($change);
+                    }
+                    break;
+                default:
+                    // Not processing any other fields right now
+            }
         }
 
-        if (! empty($changes['end'])) {
-            $values['date_due'] = strtotime($changes['end']);
-        }
+        // Filter any null/false-ish data
+        $values = array_filter($values);
 
         if (! empty($values)) {
-            $elements = explode("-", $changes['id']);
-            $values['id'] = $elements[1];
+            $values['id'] = $changes['original_id'];
             $result = null;
 
-            if ($elements[0] === "task") {
-                $result = $this->taskModificationModel->update($values);
-            } elseif ($elements[0] === "subtask") {
-                unset($values['date_started']);
-                $values['due_date'] = $values['date_due'];
-                unset($values['date_due']);
-                $result = $this->subtaskModel->update($values);
+            switch ($changes['type']) {
+                case 'task':
+                    $result = $this->taskModificationModel->update($values);
+                    break;
+                case 'subtask':
+                    $result = $this->subtaskModel->update($values);
+                    break;
             }
 
             if (! $result) {

@@ -52,11 +52,11 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
         $bars = array();
 
         foreach ($this->query->findAll() as $task) {
-            $taskFormated =  $this->formatTask($task);
+            $taskFormatted =  $this->formatTask($task);
 
-            // Subtasks processed first as it mutates $taskFormated['dependencies']
+            // Subtasks processed first as it mutates $taskFormatted['dependencies']
             foreach ($this->subtaskModel->getAll($task['id']) as $subTask) {
-                $subTaskFormatted = $this->formatSubTask($subTask, $taskFormated, $task);
+                $subTaskFormatted = $this->formatSubTask($subTask, $taskFormatted, $task);
 
                 if (!in_array($subTaskFormatted['id'], self::$ids)) {
                     $bars[] = $subTaskFormatted;
@@ -64,9 +64,9 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
                 }
             }
 
-            if (!in_array($taskFormated['id'], self::$ids)) {
-                $bars[] = $taskFormated;
-                self::$ids[] = $taskFormated['id'];
+            if (!in_array($taskFormatted['id'], self::$ids)) {
+                $bars[] = $taskFormatted;
+                self::$ids[] = $taskFormatted['id'];
             }
         }
 
@@ -91,50 +91,22 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
 
         return array(
             'type' => 'task',
+            'original_id' => $task['id'],
             'id' => "task-{$task['id']}",
             'project_id' => $task['project_id'],
-            'title' => $task['title'],
-            'start' => array(
-                (int) date('Y', $start),
-                (int) date('n', $start),
-                (int) date('j', $start),
-            ),
-            'end' => array(
-                (int) date('Y', $end),
-                (int) date('n', $end),
-                (int) date('j', $end),
-            ),
+            'name' => $task['title'],
+            'start' => date('Y-n-j', $start),
+            'end' => date('Y-n-j', $end),
             'dependencies' => $this->getLinksId($task['id']),
-            'column_title' => $task['column_name'],
-            'assignee' => $task['assignee_name'] ?: $task['assignee_username'],
-            'progress' => $this->taskModel->getProgress($task, $this->columns[$task['project_id']]),
-            'link' => $this->helper->url->href('TaskViewController', 'show', array('task_id' => $task['id'])),
-            'color' => $this->colorModel->getColorProperties($task['color_id']),
-            'not_defined' => empty($task['date_due']) || empty($task['date_started']),
-            'date_started_not_defined' => empty($task['date_started']),
-            'date_due_not_defined' => empty($task['date_due']),
+            // Never use `0` so we get a bit of the colour
+            'progress' => $this->taskModel->getProgress($task, $this->columns[$task['project_id']]) ?: 1,
+            'custom_class' => strtolower('color-' . $this->colorModel->getColorProperties($task['color_id'])['name']),
         );
     }
 
-    private function formatSubTask(array $subTask, array &$taskFormated, array $task)
+    private function formatSubTask(array $subTask, array &$taskFormatted, array $task)
     {
-        $taskFormated['dependencies'][] = "subtask-{$subTask['id']}";
-        $start = $taskFormated['start'];
-        $end = $taskFormated['end'];
-
-        if (!empty($subTask['due_date']) && $subTask['due_date'] != 0) {
-            $end = array(
-                (int) date('Y', $subTask['due_date']),
-                (int) date('n', $subTask['due_date']),
-                (int) date('j', $subTask['due_date']),
-                );
-
-            $start = array(
-                (int) date('Y', $subTask['due_date']),
-                (int) date('n', $subTask['due_date']),
-                (int) date('j', $subTask['due_date']) - 3,
-                );
-        }
+        $taskFormatted['dependencies'][] = "subtask-{$subTask['id']}";
 
         switch ($this->status[$subTask['status_name']]) {
             case 2:
@@ -150,20 +122,15 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
 
         return array(
             'type' => 'subtask',
+            'original_id' => $subTask['id'],
             'id' => "subtask-{$subTask['id']}",
             'task' => $task,
-            'title' => $subTask['title'],
-            'start' => $start,
-            'end' => $end,
+            'name' => $subTask['title'],
+            'start' => $taskFormatted['start'],
+            'end' => $taskFormatted['end'],
             'dependencies' => [],
-            'column_title' => $taskFormated['column_title'],
-            'assignee' => $taskFormated['assignee'],
             'progress' => $progress,
-            'link' => $taskFormated['link'],
-            'color' => $taskFormated['color'],
-            'not_defined' => $taskFormated['not_defined'],
-            'date_started_not_defined' => $taskFormated['date_started_not_defined'],
-            'date_due_not_defined' => $taskFormated['date_due_not_defined'],
+            'custom_class' => $taskFormatted['custom_class'],
         );
     }
 

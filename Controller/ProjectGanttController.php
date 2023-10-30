@@ -45,8 +45,8 @@ class ProjectGanttController extends BaseController
 
         $result = $this->projectModel->update(array(
             'id' => $values['id'],
-            'start_date' => $this->dateParser->getIsoDate(strtotime($values['start'])),
-            'end_date' => $this->dateParser->getIsoDate(strtotime($values['end'])),
+            'start_date' => strtotime($values['date_started']),
+            'end_date' => strtotime($values['date_due']),
         ));
 
         if (! $result) {
