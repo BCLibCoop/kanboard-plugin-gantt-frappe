@@ -71,7 +71,6 @@ KB.on('dom.ready', function () {
 			task.progress = progress;
 			GanttUtils.saveRecord(task, chartConfig);
 		},
-		//onViewChange: (mode) => {},
 	};
 
 	function goToLink(selector) {
@@ -99,15 +98,15 @@ KB.on('dom.ready', function () {
 		})
 			.then((tasks) => {
 				let gantt = new Gantt('#gantt-chart', tasks, {
-					column_width: 30,
-					step: 24,
-					header_height: 100,
+					// column_width: 30,
+					// step: 24,
+					// header_height: 100,
 					view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
 					bar_height: 25,
-					bar_corner_radius: 3,
-					arrow_curve: 5,
+					// bar_corner_radius: 3,
+					// arrow_curve: 5,
 					view_mode: 'Day',
-					date_format: 'YYYY-MM-DD',
+					// date_format: 'YYYY-MM-DD',
 					popup_trigger: 'mouseover',
 					on_click: function (task, event) {
 						GanttUtils.onClick(task, event, container);
@@ -118,15 +117,16 @@ KB.on('dom.ready', function () {
 					on_progress_change: function (task, progress) {
 						GanttUtils.onProgressChange(task, progress);
 					},
-					//on_view_change: function (mode) {
-					//	GanttUtils.onViewChange(mode);
-					//},
 				});
+
 				const oldest = gantt.get_oldest_starting_date().getTime();
 				const t = new Date() - oldest;
 
 				gantt.gantt_start = new Date(gantt.gantt_start.getTime() - t);
 				gantt.set_scroll_position();
+
+				// Use ID for kanboard styling
+				gantt.popup_wrapper.id = 'tooltip-container';
 
 				return gantt;
 			})
@@ -140,37 +140,6 @@ KB.on('dom.ready', function () {
 					$btn.parent().parent().find('li').removeClass('active');
 					$btn.parent('li').addClass('active');
 				});
-				//DoubleScroll(container);
 			});
-	}
-
-	function DoubleScroll(element) {
-		let scrollbar = document.createElement('div');
-		scrollbar.appendChild(document.createElement('div'));
-		scrollbar.style.overflow = 'auto';
-		scrollbar.style.overflowY = 'hidden';
-		scrollbar.firstChild.style.height = '1px';
-		scrollbar.firstChild.style.width = element.scrollWidth + 'px';
-		//scrollbar.firstChild.style.paddingTop= '1px';
-		scrollbar.firstChild.appendChild(document.createTextNode('\xA0'));
-		let running = false;
-		scrollbar.addEventListener('scroll', () => {
-			if (running) {
-				running = false;
-				return;
-			}
-			running = true;
-			element.scrollLeft = scrollbar.scrollLeft;
-		});
-		element.addEventListener('scroll', () => {
-			if (running) {
-				running = false;
-				return;
-			}
-			running = true;
-			scrollbar.scrollLeft = element.scrollLeft;
-		});
-
-		element.parentNode.insertBefore(scrollbar, element);
 	}
 });

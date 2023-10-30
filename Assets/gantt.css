@@ -1,91 +1,115 @@
 #gantt-chart {
-	margin-top: 10px !important;
+	margin-top: 10px;
 }
 
-.color-yellow .bar-progress {
-	fill: #fbda38 !important;
+.gantt .bar {
+	fill: #f5f9ff;
+	stroke: #ccdcf3;
 }
 
-.color-blue .bar-progress {
-	fill: #4694ff !important;
+.gantt .bar-wrapper:hover .bar,
+.gantt .bar-wrapper.active .bar {
+	fill: #e1edff;
 }
 
-.color-green .bar-progress {
-	fill: #4ba975 !important;
+.gantt .bar-label {
+	font-weight: unset;
+	fill: #304b6f;
 }
 
-.color-purple .bar-progress {
-	fill: #856be2 !important;
+.gantt-container .popup-wrapper,
+.gantt-container .popup-wrapper .subtitle {
+	color: inherit;
 }
 
-.color-red .bar-progress {
-	fill: #ff2a2a !important;
+.gantt-container .popup-wrapper .title {
+	border-bottom-color: #ebf3ff;
 }
 
-.color-orange .bar-progress {
-	fill: #fb9531 !important;
+.gantt .bar-wrapper.color-yellow .bar-progress {
+	fill: #fbda38;
 }
 
-.color-grey .bar-progress {
-	fill: #a09c9c !important;
+.gantt .bar-wrapper.color-blue .bar-progress {
+	fill: #4694ff;
 }
 
-.color-brown .bar-progress {
-	fill: #ab6333 !important;
+.gantt .bar-wrapper.color-green .bar-progress {
+	fill: #4ba975;
 }
 
-.color-deep_orange .bar-progress {
-	fill: #e66e0b !important;
+.gantt .bar-wrapper.color-purple .bar-progress {
+	fill: #856be2;
 }
 
-.color-dark_grey .bar-progress {
-	fill: #737373 !important;
+.gantt .bar-wrapper.color-red .bar-progress {
+	fill: #ff2a2a;
 }
 
-.color-pink .bar-progress {
-	fill: #f546d5 !important;
+.gantt .bar-wrapper.color-orange .bar-progress {
+	fill: #fb9531;
 }
 
-.color-teal .bar-progress {
-	fill: #49b1c1 !important;
+.gantt .bar-wrapper.color-grey .bar-progress {
+	fill: #a09c9c;
 }
 
-.color-cyan .bar-progress {
-	fill: #49cce0 !important;
+.gantt .bar-wrapper.color-brown .bar-progress {
+	fill: #ab6333;
 }
 
-.color-lime .bar-progress {
-	fill: #5fc55f !important;
+.gantt .bar-wrapper.color-deep_orange .bar-progress {
+	fill: #e66e0b;
 }
 
-.color-light_green .bar-progress {
-	fill: #4af74a !important;
+.gantt .bar-wrapper.color-dark_grey .bar-progress {
+	fill: #737373;
 }
 
-.color-amber .bar-progress {
-	fill: #f1d042 !important;
+.gantt .bar-wrapper.color-pink .bar-progress {
+	fill: #f546d5;
 }
 
-.today-highlight {
-	fill: #efff007a !important;
+.gantt .bar-wrapper.color-teal .bar-progress {
+	fill: #49b1c1;
+}
+
+.gantt .bar-wrapper.color-cyan .bar-progress {
+	fill: #49cce0;
+}
+
+.gantt .bar-wrapper.color-lime .bar-progress {
+	fill: #5fc55f;
+}
+
+.gantt .bar-wrapper.color-light_green .bar-progress {
+	fill: #4af74a;
+}
+
+.gantt .bar-wrapper.color-amber .bar-progress {
+	fill: #f1d042;
+}
+
+.gantt .today-highlight {
+	fill: #efff007a;
 }
 
 .plugin-header {
-  margin-bottom: 15px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items:center
+	margin-bottom: 15px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items:center
 }
 
 @media (max-width: 767px) {
-  .page #main .menu-inline {
-    padding-top: 0;
-  }
+	.page #main .menu-inline {
+		padding-top: 0;
+	}
 
-  .plugin-header {
-      display:block
-  }
+	.plugin-header {
+			display:block
+	}
 }
