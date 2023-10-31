@@ -2,23 +2,6 @@
 	margin-top: 10px;
 }
 
-.gantt .bar {
-	fill: #f5f9ff;
-	stroke: #ccdcf3;
-	user-select: none !important;
-	-webkit-user-select: none !important;
-}
-
-.gantt .bar-wrapper:hover .bar,
-.gantt .bar-wrapper.active .bar {
-	fill: #e1edff;
-}
-
-.gantt .bar-label {
-	font-weight: unset;
-	fill: #304b6f;
-}
-
 .gantt-container .popup-wrapper {
 	opacity: 0;
 }
@@ -32,67 +15,94 @@
 	border-bottom-color: #ebf3ff;
 }
 
-.gantt .bar-wrapper.color-yellow .bar-progress {
+.gantt .bar-label {
+	font-weight: unset;
+	fill: #304b6f;
+	fill-opacity: 1.0;
+}
+
+.gantt .bar {
+	fill-opacity: 0.70;
+	user-select: none !important;
+	-webkit-user-select: none !important;
+}
+
+.gantt .bar-wrapper:hover .bar,
+.gantt .bar-wrapper.active .bar {
+	fill-opacity: 1.0;
+}
+
+.gantt .bar-wrapper .bar-progress {
+	fill: #666;
+	mix-blend-mode: color-burn;
+}
+
+.gantt .bar-wrapper:hover .bar-progress,
+.gantt .bar-wrapper.active .bar-progress {
+	fill: #555;
+}
+
+.gantt .bar-wrapper.color-yellow .bar {
 	fill: #fbda38;
 }
 
-.gantt .bar-wrapper.color-blue .bar-progress {
+.gantt .bar-wrapper.color-blue .bar {
 	fill: #4694ff;
 }
 
-.gantt .bar-wrapper.color-green .bar-progress {
+.gantt .bar-wrapper.color-green .bar {
 	fill: #4ba975;
 }
 
-.gantt .bar-wrapper.color-purple .bar-progress {
+.gantt .bar-wrapper.color-purple .bar {
 	fill: #856be2;
 }
 
-.gantt .bar-wrapper.color-red .bar-progress {
+.gantt .bar-wrapper.color-red .bar {
 	fill: #ff2a2a;
 }
 
-.gantt .bar-wrapper.color-orange .bar-progress {
+.gantt .bar-wrapper.color-orange .bar {
 	fill: #fb9531;
 }
 
-.gantt .bar-wrapper.color-grey .bar-progress {
+.gantt .bar-wrapper.color-grey .bar {
 	fill: #a09c9c;
 }
 
-.gantt .bar-wrapper.color-brown .bar-progress {
+.gantt .bar-wrapper.color-brown .bar {
 	fill: #ab6333;
 }
 
-.gantt .bar-wrapper.color-deep_orange .bar-progress {
+.gantt .bar-wrapper.color-deep_orange .bar {
 	fill: #e66e0b;
 }
 
-.gantt .bar-wrapper.color-dark_grey .bar-progress {
+.gantt .bar-wrapper.color-dark_grey .bar {
 	fill: #737373;
 }
 
-.gantt .bar-wrapper.color-pink .bar-progress {
+.gantt .bar-wrapper.color-pink .bar {
 	fill: #f546d5;
 }
 
-.gantt .bar-wrapper.color-teal .bar-progress {
+.gantt .bar-wrapper.color-teal .bar {
 	fill: #49b1c1;
 }
 
-.gantt .bar-wrapper.color-cyan .bar-progress {
+.gantt .bar-wrapper.color-cyan .bar {
 	fill: #49cce0;
 }
 
-.gantt .bar-wrapper.color-lime .bar-progress {
+.gantt .bar-wrapper.color-lime .bar {
 	fill: #5fc55f;
 }
 
-.gantt .bar-wrapper.color-light_green .bar-progress {
+.gantt .bar-wrapper.color-light_green .bar {
 	fill: #4af74a;
 }
 
-.gantt .bar-wrapper.color-amber .bar-progress {
+.gantt .bar-wrapper.color-amber .bar {
 	fill: #f1d042;
 }
 

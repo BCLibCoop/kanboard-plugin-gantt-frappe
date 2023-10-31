@@ -99,7 +99,7 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
             'end' => date('Y-n-j', $end),
             'dependencies' => $this->getLinksId($task['id']),
             // Never use `0` so we get a bit of the colour
-            'progress' => $this->taskModel->getProgress($task, $this->columns[$task['project_id']]) ?: 1,
+            'progress' => $this->taskModel->getProgress($task, $this->columns[$task['project_id']]),
             'custom_class' => strtolower('color-' . $this->colorModel->getColorProperties($task['color_id'])['name']),
         );
     }
@@ -117,7 +117,7 @@ class TaskGanttFormatter extends BaseFormatter implements FormatterInterface
                 break;
             case 0:
             default:
-                $progress = 1;
+                $progress = 0;
         }
 
         return array(
