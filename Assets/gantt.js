@@ -68,7 +68,7 @@ KB.on('dom.ready', function () {
 
 		const gantt = new Gantt('#gantt-chart', window.ganttTasks ?? [], {
 			bar_height: 30,
-			view_modes: ['Half Day', 'Day', 'Week', 'Month', 'Quarter'],
+			view_modes: ['Day', 'Week', 'Month', 'Quarter', 'Year'],
 			view_mode: 'Day',
 			popup_trigger: 'mouseover',
 			on_click: function (task, event) {

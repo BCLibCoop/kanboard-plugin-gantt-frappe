@@ -16,9 +16,6 @@
         </div>
         <div class="views-switcher-component menu-inline">
             <ul class="views">
-                <li>
-                    <a href="#">Half Day</a>
-                </li>
                 <li class="active">
                     <a href="#">Day</a>
                 </li>
@@ -30,6 +27,9 @@
                 </li>
                 <li>
                     <a href="#">Quarter</a>
+                </li>
+                <li>
+                    <a href="#">Year</a>
                 </li>
             </ul>
         </div>
