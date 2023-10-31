@@ -5,7 +5,6 @@ KB.on('dom.ready', function () {
 	const GanttUtils = {
 		saveRecord: (record) => {
 			$.ajax({
-				cache: false,
 				url: window.ganttSaveController,
 				contentType: 'application/json',
 				type: 'POST',
@@ -13,7 +12,7 @@ KB.on('dom.ready', function () {
 				data: JSON.stringify(record),
 			});
 		},
-		onClick: function (task, event, container) {
+		onClick: function (task, event) {
 			if (typeof links['t' + task.id] === 'undefined') {
 				const dropdown = document.getElementById('dropdown-task-id-' + task.id);
 
@@ -21,7 +20,7 @@ KB.on('dom.ready', function () {
 					return;
 				}
 
-				const bar = container.querySelector('[data-id="' + task.id + '"]');
+				const bar = document.getElementById('gantt-chart').querySelector('[data-id="' + task.id + '"]');
 				links['t' + task.id] = dropdown.querySelector('a.dropdown-menu-link-icon');
 
 				if (!dropdown.dataset.mounted) {
@@ -64,19 +63,12 @@ KB.on('dom.ready', function () {
 	});
 
 	if (KB.exists('#gantt-chart')) {
-		const container = document.getElementById('gantt-chart');
-
 		const gantt = new Gantt('#gantt-chart', window.ganttTasks ?? [], {
 			bar_height: 30,
-			view_modes: ['Day', 'Week', 'Month', 'Quarter', 'Year'],
 			view_mode: 'Day',
 			popup_trigger: 'mouseover',
-			on_click: function (task, event) {
-				GanttUtils.onClick(task, event, container);
-			},
-			on_date_change: function (task, start, end) {
-				GanttUtils.onDateChange(task, start, end);
-			},
+			on_click: GanttUtils.onClick,
+			on_date_change: GanttUtils.onDateChange,
 		});
 
 		// Use ID for kanboard styling
