@@ -2,10 +2,10 @@
 
 namespace Kanboard\Plugin\Gantt\Controller;
 
-use Kanboard\Controller\BaseController;
-use Kanboard\Filter\ProjectIdsFilter;
-use Kanboard\Filter\ProjectStatusFilter;
+use Kanboard\Plugin\Gantt\Plugin;
 use Kanboard\Filter\ProjectTypeFilter;
+use Kanboard\Filter\ProjectStatusFilter;
+use Kanboard\Filter\ProjectIdsFilter;
 use Kanboard\Model\ProjectModel;
 
 /**
@@ -15,7 +15,7 @@ use Kanboard\Model\ProjectModel;
  * @author  Frederic Guillot
  * @property \Kanboard\Plugin\Gantt\Formatter\ProjectGanttFormatter $projectGanttFormatter
  */
-class ProjectGanttController extends BaseController
+class ProjectGanttController extends \Kanboard\Controller\BaseController
 {
     /**
      * Show Gantt chart for all projects
@@ -28,9 +28,9 @@ class ProjectGanttController extends BaseController
             ->withFilter(new ProjectStatusFilter(ProjectModel::ACTIVE))
             ->withFilter(new ProjectIdsFilter($project_ids));
 
-        $filter->getQuery()->asc(ProjectModel::TABLE.'.start_date');
+        $filter->getQuery()->asc(ProjectModel::TABLE . '.start_date');
 
-        $this->response->html($this->helper->layout->app('Gantt:project_gantt/show', array(
+        $this->response->html($this->helper->layout->app(Plugin::$name . ':project_gantt/show', array(
             'projects' => $filter->format($this->projectGanttFormatter),
             'title' => t('Gantt chart for all projects'),
         )));
@@ -49,7 +49,7 @@ class ProjectGanttController extends BaseController
             'end_date' => strtotime($values['date_due']),
         ));
 
-        if (! $result) {
+        if (!$result) {
             $this->response->json(array('message' => 'Unable to save project'), 400);
         } else {
             $this->response->json(array('message' => 'OK'), 201);

@@ -2,52 +2,64 @@
 
 namespace Kanboard\Plugin\Gantt;
 
-use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
-use Kanboard\Plugin\Gantt\Formatter\ProjectGanttFormatter;
-use Kanboard\Plugin\Gantt\Formatter\TaskGanttFormatter;
 
-class Plugin extends Base
+class Plugin extends \Kanboard\Core\Plugin\Base
 {
+    public static $name = 'Gantt';
+
     public function initialize()
     {
-        $this->route->addRoute('gantt/:project_id', 'TaskGanttController', 'show', 'Gantt');
-        $this->route->addRoute('gantt/:project_id/sort/:sorting', 'TaskGanttController', 'show', 'Gantt');
-        $this->route->addRoute('gantt/:project_id/search/:search', 'TaskGanttController', 'show', 'Gantt');
-        $this->route->addRoute('projects/gantt', 'ProjectGanttController', 'show', 'Gantt');
+        $this->route->addRoute('gantt/:project_id', 'TaskGanttController', 'show', self::$name);
+        $this->route->addRoute('gantt/:project_id/sort/:sorting', 'TaskGanttController', 'show', self::$name);
+        $this->route->addRoute('gantt/:project_id/search/:search', 'TaskGanttController', 'show', self::$name);
+        $this->route->addRoute('projects/gantt', 'ProjectGanttController', 'show', self::$name);
 
         $this->projectAccessMap->add('ProjectGanttController', 'save', Role::PROJECT_MANAGER);
         $this->projectAccessMap->add('TaskGanttController', 'save', Role::PROJECT_MEMBER);
 
-        $this->template->hook->attach('template:project-header:view-switcher', 'Gantt:project_header/views');
-        $this->template->hook->attach('template:project:dropdown', 'Gantt:project/dropdown');
-        $this->template->hook->attach('template:project-list:menu:after', 'Gantt:project_list/menu');
-        $this->template->hook->attach('template:config:sidebar', 'Gantt:config/sidebar');
+        $this->template->hook->attach('template:project-header:view-switcher', self::$name . ':project_header/views');
+        $this->template->hook->attach('template:project:dropdown', self::$name . ':project/dropdown');
+        $this->template->hook->attach('template:project-list:menu:after', self::$name . ':project_list/menu');
+        $this->template->hook->attach('template:config:sidebar', self::$name . ':config/sidebar');
 
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Gantt/Assets/frappe-gantt.js'));
-        $this->hook->on('template:layout:css', array('template' => 'plugins/Gantt/Assets/frappe-gantt.css'));
+        $this->hook->on('template:layout:js', array('template' => $this->assetPath('frappe-gantt.js')));
+        $this->hook->on('template:layout:css', array('template' => $this->assetPath('frappe-gantt.css')));
 
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Gantt/Assets/gantt.js'));
-        $this->hook->on('template:layout:css', array('template' => 'plugins/Gantt/Assets/gantt.css'));
+        $this->hook->on('template:layout:js', array('template' => $this->assetPath('gantt.js')));
+        $this->hook->on('template:layout:css', array('template' => $this->assetPath('gantt.css')));
 
         $this->container['projectGanttFormatter'] = $this->container->factory(function ($c) {
-            return new ProjectGanttFormatter($c);
+            return new Formatter\ProjectGanttFormatter($c);
         });
 
         $this->container['taskGanttFormatter'] = $this->container->factory(function ($c) {
-            return new TaskGanttFormatter($c);
+            return new Formatter\TaskGanttFormatter($c);
         });
+    }
+
+    private function assetPath($asset_filename)
+    {
+        return implode(
+            DIRECTORY_SEPARATOR,
+            array(
+                basename(PLUGINS_DIR),
+                self::$name,
+                'Assets',
+                $asset_filename
+            )
+        );
     }
 
     public function onStartup()
     {
-        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__ . '/Locale');
     }
 
     public function getPluginName()
     {
-        return 'Gantt';
+        return self::$name;
     }
 
     public function getPluginDescription()
@@ -57,17 +69,17 @@ class Plugin extends Base
 
     public function getPluginAuthor()
     {
-        return 'Frédéric Guillot, Nassim Ourami';
+        return 'Frédéric Guillot, Nassim Ourami, BC Libraries Coop';
     }
 
     public function getPluginVersion()
     {
-        return '1.0.6';
+        return '1.1.0';
     }
 
     public function getPluginHomepage()
     {
-        return 'https://github.com/Trickscenique/plugin-gantt';
+        return 'https://github.com/BCLibCoop/kanboard-plugin-gantt-frappe';
     }
 
     public function getCompatibleVersion()

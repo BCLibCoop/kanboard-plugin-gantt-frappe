@@ -2,7 +2,7 @@
 
 namespace Kanboard\Plugin\Gantt\Controller;
 
-use Kanboard\Controller\BaseController;
+use Kanboard\Plugin\Gantt\Plugin;
 use Kanboard\Filter\TaskProjectFilter;
 use Kanboard\Model\TaskModel;
 
@@ -13,7 +13,7 @@ use Kanboard\Model\TaskModel;
  * @author   Frederic Guillot
  * @property \Kanboard\Plugin\Gantt\Formatter\TaskGanttFormatter $taskGanttFormatter
  */
-class TaskGanttController extends BaseController
+class TaskGanttController extends \Kanboard\Controller\BaseController
 {
     /**
      * Show Gantt chart for one project
@@ -31,12 +31,12 @@ class TaskGanttController extends BaseController
         }
 
         if ($sorting === 'date') {
-            $filter->getQuery()->asc(TaskModel::TABLE.'.date_started')->asc(TaskModel::TABLE.'.date_due');
+            $filter->getQuery()->asc(TaskModel::TABLE . '.date_started')->asc(TaskModel::TABLE . '.date_due');
         } else {
-            $filter->getQuery()->asc('column_position')->asc(TaskModel::TABLE.'.position');
+            $filter->getQuery()->asc('column_position')->asc(TaskModel::TABLE . '.position');
         }
 
-        $this->response->html($this->helper->layout->app('Gantt:task_gantt/show', array(
+        $this->response->html($this->helper->layout->app(Plugin::$name . ':task_gantt/show', array(
             'project' => $project,
             'title' => $project['name'],
             'description' => $this->helper->projectHeader->getDescription($project),
@@ -44,7 +44,6 @@ class TaskGanttController extends BaseController
             'tasks' => $filter->format($this->taskGanttFormatter),
         )));
     }
-
 
     /**
      * Save new task start date and due date
@@ -72,7 +71,7 @@ class TaskGanttController extends BaseController
         // Filter any null/false-ish data
         $values = array_filter($values);
 
-        if (! empty($values)) {
+        if (!empty($values)) {
             $values['id'] = $changes['original_id'];
             $result = null;
 
@@ -85,7 +84,7 @@ class TaskGanttController extends BaseController
                     break;
             }
 
-            if (! $result) {
+            if (!$result) {
                 $this->response->json(array('message' => 'Unable to save task'), 400);
             } else {
                 $this->response->json(array('message' => 'OK'), 201);

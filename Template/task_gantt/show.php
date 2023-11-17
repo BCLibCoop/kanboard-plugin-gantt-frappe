@@ -1,16 +1,39 @@
+<?php
+
+use Kanboard\Plugin\Gantt\Plugin;
+
+?>
 <section id="main">
-    <?= $this->projectHeader->render($project, 'TaskGanttController', 'show', false, 'Gantt') ?>
+    <?= $this->projectHeader->render($project, 'TaskGanttController', 'show', false, Plugin::$name) ?>
     <div class="plugin-header">
         <div class="menu-inline">
             <ul>
                 <li <?= $sorting === 'board' ? 'class="active"' : '' ?>>
-                    <?= $this->url->icon('sort-numeric-asc', t('Sort by position'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'board', 'plugin' => 'Gantt')) ?>
+                    <?= $this->url->icon(
+                        'sort-numeric-asc',
+                        t('Sort by position'),
+                        'TaskGanttController',
+                        'show',
+                        array('project_id' => $project['id'], 'sorting' => 'board', 'plugin' => Plugin::$name)
+                    ) ?>
                 </li>
                 <li <?= $sorting === 'date' ? 'class="active"' : '' ?>>
-                    <?= $this->url->icon('sort-amount-asc', t('Sort by date'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'sorting' => 'date', 'plugin' => 'Gantt')) ?>
+                    <?= $this->url->icon(
+                        'sort-amount-asc',
+                        t('Sort by date'),
+                        'TaskGanttController',
+                        'show',
+                        array('project_id' => $project['id'], 'sorting' => 'date', 'plugin' => Plugin::$name)
+                    ) ?>
                 </li>
                 <li>
-                    <?= $this->modal->large('plus', t('Add task'), 'TaskCreationController', 'show', array('project_id' => $project['id'])) ?>
+                    <?= $this->modal->large(
+                        'plus',
+                        t('Add task'),
+                        'TaskCreationController',
+                        'show',
+                        array('project_id' => $project['id'])
+                    ) ?>
                 </li>
             </ul>
         </div>
@@ -36,6 +59,7 @@
     </div>
 
     <?php if (!empty($tasks)) : ?>
+        <?php // Render modals for use by right-click handler ?>
         <?php foreach ($tasks as $task) : ?>
             <div id="dropdown-task-id-<?= $task['id'] ?>" style="display: none;">
                 <?php $task['id'] = $task['original_id']; ?>
@@ -46,10 +70,16 @@
                 <?php endif ?>
             </div>
         <?php endforeach ?>
-        <p class="alert alert-info"><?= t('Moving or resizing a task will change the start and due date of the task.') ?></p>
+        <p class="alert alert-info">
+            <?= t('Moving or resizing a task will change the start and due date of the task.') ?>
+        </p>
         <svg id="gantt-chart"></svg>
         <script>
-            var ganttSaveController = <?= json_encode($this->url->to('TaskGanttController', 'save', array('project_id' => $project['id'], 'plugin' => 'Gantt'))) ?>;
+            var ganttSaveController = <?= json_encode($this->url->to(
+                'TaskGanttController',
+                'save',
+                array('project_id' => $project['id'], 'plugin' => Plugin::$name)
+            )) ?>;
             var ganttTasks = <?= json_encode($tasks) ?>;
         </script>
     <?php else : ?>

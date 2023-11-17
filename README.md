@@ -6,6 +6,7 @@ Gantt charts for Kanboard (with Gantt Frappe pluggin)
 
 - Frederic Guillot
 - Nassim Ourami
+- BC Libraries Coop
 - License MIT
 
 ## Requirements

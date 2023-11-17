@@ -11,9 +11,12 @@ class ConfigController extends \Kanboard\Controller\ConfigController
 {
     public function show()
     {
-        $this->response->html($this->helper->layout->config('Gantt:config/gantt', array(
-            'title' => t('Settings').' &gt; '.t('Gantt settings'),
-        )));
+        $this->response->html($this->helper->layout->config(
+            \Kanboard\Plugin\Gantt\Plugin::$name . ':config/gantt',
+            array(
+                'title' => t('Settings') . ' &gt; ' . t('Gantt settings'),
+            )
+        ));
     }
 
     public function save()
@@ -27,6 +30,10 @@ class ConfigController extends \Kanboard\Controller\ConfigController
             $this->flash->failure(t('Unable to save your settings.'));
         }
 
-        $this->response->redirect($this->helper->url->to('ConfigController', 'show', array('plugin' => 'Gantt')));
+        $this->response->redirect($this->helper->url->to(
+            'ConfigController',
+            'show',
+            array('plugin' => \Kanboard\Plugin\Gantt\Plugin::$name)
+        ));
     }
 }

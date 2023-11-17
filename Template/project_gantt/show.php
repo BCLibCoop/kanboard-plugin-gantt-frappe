@@ -8,7 +8,12 @@
             <?php endif ?>
             <?php if ($this->app->config('disable_private_project', 0) == 0) : ?>
                 <li>
-                    <?= $this->modal->medium('lock', t('New private project'), 'ProjectCreationController', 'createPrivate') ?>
+                    <?= $this->modal->medium(
+                        'lock',
+                        t('New private project'),
+                        'ProjectCreationController',
+                        'createPrivate'
+                    ) ?>
                 </li>
             <?php endif ?>
             <li>
@@ -21,13 +26,19 @@
             <?php endif ?>
         </ul>
     </div>
-    <section>
+    <section class="margin-bottom">
         <?php if (empty($projects)) : ?>
             <p class="alert"><?= t('No project') ?></p>
         <?php else : ?>
             <svg id="gantt-chart"></svg>
             <script>
-                var ganttSaveController = <?= json_encode($this->url->to('TaskGanttController', 'save', array('project_id' => $project['id'], 'plugin' => 'Gantt'))) ?>;
+                var ganttSaveController = <?= json_encode($this->url->to(
+                    'ProjectGanttController',
+                    'save',
+                    array(
+                        'plugin' => \Kanboard\Plugin\Gantt\Plugin::$name,
+                    )
+                )) ?>;
                 var ganttTasks = <?= json_encode($projects) ?>;
             </script>
         <?php endif ?>

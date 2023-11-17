@@ -2,8 +2,8 @@
 
 namespace Kanboard\Plugin\Gantt\Formatter;
 
-use Kanboard\Core\Filter\FormatterInterface;
 use Kanboard\Formatter\BaseFormatter;
+use Kanboard\Core\Filter\FormatterInterface;
 
 /**
  * Gantt chart formatter for projects
