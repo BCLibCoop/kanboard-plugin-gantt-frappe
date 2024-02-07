@@ -2,6 +2,7 @@ var Gantt = (function () {
     'use strict';
 
     const YEAR = 'year';
+    const QUARTER = 'quarter';
     const MONTH = 'month';
     const DAY = 'day';
     const HOUR = 'hour';
@@ -74,7 +75,7 @@ var Gantt = (function () {
             const format_map = {
                 YYYY: values[0],
                 YY: values[0].toString().substring(2),
-                QQ: Math.ceil((padStart(+values[1] + 2, 2, 0)) / 3),
+                QQ: Math.ceil((+values[1] + 1) / 3),
                 MM: padStart(+values[1] + 1, 2, 0),
                 DD: values[2],
                 HH: values[3],
@@ -159,7 +160,8 @@ var Gantt = (function () {
 
         start_of(date, scale) {
             const scores = {
-                [YEAR]: 6,
+                [YEAR]: 7,
+                [QUARTER]: 6,
                 [MONTH]: 5,
                 [DAY]: 4,
                 [HOUR]: 3,
@@ -175,7 +177,8 @@ var Gantt = (function () {
 
             const vals = [
                 date.getFullYear(),
-                should_reset(YEAR) ? 0 : date.getMonth(),
+                should_reset(YEAR) ? 0 : should_reset(QUARTER) ?
+                    Math.ceil((date.getMonth() + 1) / 3) : date.getMonth(),
                 should_reset(MONTH) ? 1 : date.getDate(),
                 should_reset(DAY) ? 0 : date.getHours(),
                 should_reset(HOUR) ? 0 : date.getMinutes(),
@@ -678,14 +681,23 @@ var Gantt = (function () {
             const task_start = this.task._start;
             const gantt_start = this.gantt.gantt_start;
 
-            const diff = date_utils.diff(task_start, gantt_start, 'hour');
-            let x = (diff / step) * column_width;
+            if (this.gantt.view_is('Quarter')) {
+                // We're using "90 day quarters", so we need to fudge things to
+                // avoid skew from non-30-day months
+                const month_start = date_utils.start_of(task_start, 'month');
+                const day_diff = date_utils.diff(month_start, gantt_start, 'day');
+                const scaled_date = (date_utils.get_days_in_month(task_start) / task_start.getDate()) / 30;
 
-            if (this.gantt.view_is('Month')) {
+                return ((day_diff + scaled_date) * column_width) / 90;
+            } else if (this.gantt.view_is('Month')) {
                 const diff = date_utils.diff(task_start, gantt_start, 'day');
-                x = (diff * column_width) / 30;
+
+                return (diff * column_width) / 30;
             }
-            return x;
+
+            const diff = date_utils.diff(task_start, gantt_start, 'hour');
+
+            return (diff / step) * column_width;
         }
 
         compute_y() {
@@ -1176,8 +1188,10 @@ var Gantt = (function () {
                 this.gantt_start = date_utils.start_of(this.gantt_start, 'year');
                 this.gantt_end = date_utils.add(this.gantt_end, 1, 'year');
             } else if (this.view_is(VIEW_MODE.QUARTER)) {
+                this.gantt_start = date_utils.start_of(this.gantt_start, 'year');
                 this.gantt_start = date_utils.add(this.gantt_start, -1, 'year');
-                this.gantt_end = date_utils.add(this.gantt_end, 1, 'year');
+                this.gantt_end = date_utils.start_of(this.gantt_end, 'year');
+                this.gantt_end = date_utils.add(this.gantt_end, 2, 'year');
             } else if (this.view_is(VIEW_MODE.YEAR)) {
                 this.gantt_start = date_utils.add(this.gantt_start, -2, 'year');
                 this.gantt_end = date_utils.add(this.gantt_end, 2, 'year');
