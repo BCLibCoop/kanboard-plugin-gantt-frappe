@@ -23,8 +23,6 @@
 
 .gantt .bar {
 	fill-opacity: 0.70;
-	user-select: none !important;
-	-webkit-user-select: none !important;
 }
 
 .gantt .bar-wrapper:hover .bar,

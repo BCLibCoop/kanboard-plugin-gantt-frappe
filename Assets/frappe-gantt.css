@@ -1,3 +1,8 @@
+.gantt {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .gantt .grid-background {
   fill: none;
 }
@@ -36,7 +41,6 @@
   stroke: #8D99A6;
   stroke-width: 0;
   transition: stroke-width 0.3s ease;
-  user-select: none;
 }
 .gantt .bar-progress {
   fill: #a3a3ff;
