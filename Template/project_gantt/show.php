@@ -30,17 +30,10 @@
         <?php if (empty($projects)) : ?>
             <p class="alert"><?= t('No project') ?></p>
         <?php else : ?>
-            <svg id="gantt-chart"></svg>
-            <script>
-                var ganttSaveController = <?= json_encode($this->url->to(
-                    'ProjectGanttController',
-                    'save',
-                    array(
-                        'plugin' => \Kanboard\Plugin\Gantt\Plugin::$name,
-                    )
-                )) ?>;
-                var ganttTasks = <?= json_encode($projects) ?>;
-            </script>
+            <svg id="gantt-chart"
+                data-save-chart-url="<?= $this->url->href('ProjectGanttController', 'save', array('plugin' => \Kanboard\Plugin\Gantt\Plugin::$name)) ?>"
+                data-tasks='<?= json_encode($projects, JSON_HEX_APOS) ?>'
+            ></svg>
         <?php endif ?>
     </section>
 </section>

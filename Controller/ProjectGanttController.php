@@ -30,12 +30,6 @@ class ProjectGanttController extends \Kanboard\Controller\BaseController
 
         $filter->getQuery()->asc(ProjectModel::TABLE . '.start_date');
 
-        // Set a CSP that will allow our <script> tag
-        $this->container['cspRules'] = [
-            'default-src' => "'self' 'unsafe-inline'",
-            'img-src' => '* data:',
-        ];
-
         $this->response->html($this->helper->layout->app(Plugin::$name . ':project_gantt/show', array(
             'projects' => $filter->format($this->projectGanttFormatter),
             'title' => t('Gantt chart for all projects'),

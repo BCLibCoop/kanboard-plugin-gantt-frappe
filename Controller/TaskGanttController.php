@@ -36,12 +36,6 @@ class TaskGanttController extends \Kanboard\Controller\BaseController
             $filter->getQuery()->asc('column_position')->asc(TaskModel::TABLE . '.position');
         }
 
-        // Set a CSP that will allow our <script> tag
-        $this->container['cspRules'] = [
-            'default-src' => "'self' 'unsafe-inline'",
-            'img-src' => '* data:',
-        ];
-
         $this->response->html($this->helper->layout->app(Plugin::$name . ':task_gantt/show', array(
             'project' => $project,
             'title' => $project['name'],

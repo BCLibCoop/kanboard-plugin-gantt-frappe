@@ -73,15 +73,10 @@ use Kanboard\Plugin\Gantt\Plugin;
         <p class="alert alert-info">
             <?= t('Moving or resizing a task will change the start and due date of the task.') ?>
         </p>
-        <svg id="gantt-chart"></svg>
-        <script>
-            var ganttSaveController = <?= json_encode($this->url->to(
-                'TaskGanttController',
-                'save',
-                array('project_id' => $project['id'], 'plugin' => Plugin::$name)
-            )) ?>;
-            var ganttTasks = <?= json_encode($tasks) ?>;
-        </script>
+        <svg id="gantt-chart"
+            data-save-chart-url="<?= $this->url->href('TaskGanttController', 'save', array('project_id' => $project['id'], 'plugin' => Plugin::$name)) ?>"
+            data-tasks='<?= json_encode($tasks, JSON_HEX_APOS) ?>'
+        ></svg>
     <?php else : ?>
         <p class="alert"><?= t('There is no task in your project.') ?></p>
     <?php endif ?>
